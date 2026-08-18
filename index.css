@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-body: "Archivo", "Helvetica Neue", sans-serif;
+
+  --color-pine-950: #0b130d;
+  --color-pine-900: #101a13;
+  --color-pine-800: #182619;
+  --color-pine-700: #223424;
+  --color-pine-600: #2e4530;
+
+  --color-moss-500: #52704a;
+  --color-moss-400: #6b8a5e;
+
+  --color-leaf-500: #8fae44;
+  --color-leaf-400: #a6c35c;
+  --color-leaf-300: #c3da85;
+  --color-leaf-200: #dceab4;
+
+  --color-sage-50: #f4f6ea;
+  --color-sage-100: #edf0e0;
+  --color-sage-200: #e1e7cd;
+  --color-sage-300: #cbd5b2;
+
+  --color-ochre-400: #d9a441;
+  --color-ochre-500: #c08a2b;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-sage-100);
+  color: var(--color-pine-900);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-leaf-400);
+  color: var(--color-pine-950);
+}
+
+/* ---------- keyframes ---------- */
+@keyframes kenburns {
+  0% { transform: scale(1.02) translate(0, 0); }
+  100% { transform: scale(1.14) translate(-1.5%, 1.5%); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes lineUp {
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes growBar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes swayLeaf {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(4deg); }
+}
+
+.animate-kenburns { animation: kenburns 22s ease-in-out infinite alternate; }
+.animate-marquee { animation: marquee 32s linear infinite; }
+.animate-floaty { animation: floaty 5s ease-in-out infinite; }
+.animate-sway { animation: swayLeaf 6s ease-in-out infinite; transform-origin: bottom center; }
+
+.line-mask { display: block; overflow: hidden; }
+.line-mask > span {
+  display: block;
+  transform: translateY(110%);
+  animation: lineUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+.fade-in-anim { opacity: 0; animation: fadeIn 1s ease forwards; animation-delay: var(--d, 0s); }
+
+/* ---------- scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--rd, 0s);
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* ---------- textures ---------- */
+.noise-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.botanical-bg {
+  background-image: radial-gradient(ellipse 60% 50% at 85% 10%, rgba(166, 195, 92, 0.12), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(82, 112, 74, 0.14), transparent 60%);
+}
+
+.underline-grow {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1.5px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 0.35s ease;
+}
+.underline-grow:hover { background-size: 100% 1.5px; }
+
+/* thin custom scrollbar on dark sections */
+* { scrollbar-width: thin; scrollbar-color: var(--color-moss-500) transparent; }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .line-mask > span { transform: none; animation: none; }
+  .fade-in-anim { opacity: 1; animation: none; }
+  .reveal { opacity: 1; transform: none; }
+  .animate-kenburns, .animate-marquee, .animate-floaty, .animate-sway { animation: none; }
+}
